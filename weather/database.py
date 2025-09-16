@@ -3,9 +3,9 @@ import psycopg2
 class DatabaseConfig:
     '''Класс конфигурации БД'''
     def __init__(self,
-                 database: str = "",
-                 host: str="",
-                 user:str = "",
+                 database: str = "", 
+                 host: str="", 
+                 user:str = "", 
                  password:str = "",
                  port:int="5432"):
         self.host=host,
@@ -22,14 +22,14 @@ class DatabaseConfig:
             'password':self.password[0],
             'port':self.port
         }
-
+    
 class DatabaseConnection:
     '''Класс подключения к БД'''
 
     def __init__(self, config:DatabaseConfig):
         self.config = config
         self._connection = None
-
+    
     def get_connection(self):
         if self._connection is None or self._connection.closed:
             print(self.config.get_connection_params())
