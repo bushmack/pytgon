@@ -81,7 +81,7 @@ services:
   ticketservice:
     stop_grace_period: 30s
     stop_signal: SIGTERM
-    container_name: ticket-api
+    container_name: flight-api
     build:
       context: .
       dockerfile: ./Dockerfile
