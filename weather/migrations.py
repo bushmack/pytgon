@@ -14,10 +14,12 @@ class MigrationManager:
 
         # Execution
         cursor.execute('''
-            CREATE TABLE IF NOT EXISTS flights(
+            CREATE TABLE IF NOT EXISTS tickets(
                         id SERIAL PRIMARY KEY,
-                        plane VARCHAR(100) NOT NULL,
-                        price DECIMAL(10,2) NOT NULL
+                        row DECIMAL(10,2) NOT NULL,
+                        place DECIMAL(10,2) NOT NULL, 
+                        name_movie VARCHAR(100) NOT NULL,
+                        price DECIMAL(10, 2) NOT NULL,
                         )
             ''')
         conn.commit()
