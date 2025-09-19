@@ -1,28 +1,29 @@
-from repository import FlightRepository
-from flight import Flight
+from repository import TicketRepository
+from ticket import Ticket
 
-class FlightService:
-    def __init__(self,repository:FlightRepository):
+
+class TicketService:
+    def __init__(self, repository: TicketRepository):
         self.repository = repository
 
-    def create_flight(self, flight:Flight):
+    def create_ticket(self, ticket: Ticket):
         """Добавление рейса"""
-        return self.repository.create_flight(flight)
-    
+        return self.repository.create_ticket(ticket)
+
     def get_all(self):
         '''Получить все полёты'''
         return self.repository.get_all()
-        
-    def get_by_id(self,flight_id:int):
+
+    def get_by_id(self, ticket_id: int):
         '''Получить полёт по id'''
-        return self.repository.get_by_id(flight_id)
-    
-    def update_flight(self, flight:Flight):
-        """Изменить существующий рейс. 
+        return self.repository.get_by_id(ticket_id)
+
+    def update_ticket(self, ticket: Ticket):
+        """Изменить существующий рейс.
             Если рейса не существует, ничего не делать."""
-        return self.repository.update_flight(flight)
-    
-    def delete_flight(self,flight_id:int):
+        return self.repository.update_ticket(ticket)
+
+    def delete_ticket(self, ticket_id: int):
         """Удалить существующий рейс.
             Если рейса не существует, ничего не делать."""
-        return self.repository.delete_flight(flight_id)
+        return self.repository.delete_ticket(ticket_id)
