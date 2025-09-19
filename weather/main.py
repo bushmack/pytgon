@@ -9,7 +9,7 @@ from ticket import Ticket
 ## DB config
 db_config = DatabaseConfig(
     'ticketsdb',
-    'postgres',
+    '192.168.143.67',
     'postgres',
     '123Secret_a',
     5432
