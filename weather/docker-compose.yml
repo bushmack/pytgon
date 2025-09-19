@@ -35,21 +35,19 @@ services:
       - "-c"
       - "pg_stat_statements.track=all"
     environment:
-      POSTGRES_DB: "ticketsdb"
+      POSTGRES_DB: "flightsdb"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "123Secret_a"
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
-      - ticket-data:/var/lib/postgresql/data
+      - flight-data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d ticketsdb" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d flightsdb" ]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
     restart: unless-stopped
-    ports:
-      - "5432:5432"
     deploy:
       resources:
         limits:
@@ -80,10 +78,10 @@ services:
     networks:
       - postgres
 
-  ticketservice:
+  flightservice:
     stop_grace_period: 30s
     stop_signal: SIGTERM
-    container_name: ticket-api
+    container_name: flight-api
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -96,7 +94,7 @@ services:
       - postgres
 
 volumes:
-  ticket-data:
+  flight-data:
   pgadmin-data:
 
 networks:

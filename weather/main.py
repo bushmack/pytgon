@@ -1,14 +1,14 @@
 from database import DatabaseConfig, DatabaseConnection
 from migrations import MigrationManager
-from repository import TicketRepository
-from service import TicketService
+from repository import FlightRepository
+from service import FlightService
 from fastapi import FastAPI, HTTPException
-from ticket import Ticket
+from flight import Flight
 
 # Initialize
 ## DB config
 db_config = DatabaseConfig(
-    'ticketsdb',
+    'flightsdb',
     'postgres',
     'postgres',
     '123Secret_a',
@@ -19,11 +19,11 @@ db_connection = DatabaseConnection(db_config)
 migration_manager = MigrationManager(db_config)
 migration_manager.create_tables()
 # Repository and Service
-repository = TicketRepository(db_connection)
-service = TicketService(repository)
+repository = FlightRepository(db_connection)
+service = FlightService(repository)
 
 app = FastAPI(
-    title="Ticket API"
+    title="Flight API"
 )
 
 
@@ -32,61 +32,79 @@ async def root():
     return {"message": "Hello from FastAPI"}
 
 
-@app.get("/tickets")
-async def get_tickets():
+@app.get("/flights")
+async def get_flights():
     try:
         return service.get_all()
     except Exception as e:
-        return HTTPException(status_code=500, detail=f"Ошибка при получении билета: {str(e)}")
+        return HTTPException(status_code=500, detail=f"Ошибка при получении полётов: {str(e)}")
 
-@app.get("/tickets/{ticket_id}")
-async def get_ticket_by_id(ticket_id: int):
+@app.get("/flights/{flight_id}")
+async def get_flight_by_id(flight_id: int):
     try:
-        ticket = service.get_by_id(ticket_id)
-        if not ticket:
-            raise HTTPException(status_code=404, detail="Билет не найден")
-        return ticket
+        flight = service.get_by_id(flight_id)
+        if not flight:
+            raise HTTPException(status_code=404, detail="Полёт не найден")
+        return flight
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка при получении билета: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Ошибка при получении полёта: {str(e)}")
 
 
-@app.post("/tickets")
-async def create_ticket(ticket_data: dict):
+@app.post("/flights")
+async def create_flight(flight_data: dict):
     try:
         # Validation
-        required_fields = ["row", "place", "name_movie", "price"]
+        required_fields = ["price", "plane"]
         for field in required_fields:
-            if field not in ticket_data:
+            if field not in flight_data:
                 raise HTTPException(status_code=400, detail=f"Отсутствует обязательное поле {field}")
 
-        ticket = Ticket(
-            row=ticket_data['row'],
-            place=ticket_data['place'],
-            name_movie=ticket_data['name_movie'],
-            price=ticket_data['price']
+        flight = Flight(
+            price=flight_data['price'],
+            plane=flight_data['plane']
         )
 
-        created_ticket = service.create_ticket(ticket)
-        return created_ticket
+        created_flight = service.create_flight(flight)
+        return created_flight
 
     except Exception as e:
-        return HTTPException(status_code=500, detail=f"Ошибка при добавлении билета: {str(e)}")
+        return HTTPException(status_code=500, detail=f"Ошибка при добавлении полёта: {str(e)}")
 
-
-
-@app.delete("/tickets/{ticket_id}")
-async def delete_ticket(ticket_id: int):
+@app.put("/flights/{flight_id}")
+async def update_flight(flight_id: int, flight_data: dict):
     try:
-        result = service.delete_ticket(ticket_id)
-        if not result:
-            raise HTTPException(status_code=404, detail="Билет не найден для удаления")
-        return {"message": "Билет успешно удалён"}
+        # Проверка наличия данных для обновления
+        if not flight_data:
+            raise HTTPException(status_code=400, detail="Нет данных для обновления")
+        # Создаем объект Flight с обновленными данными
+        flight = Flight(
+            id=flight_id,
+            price=flight_data.get('price'),
+            plane=flight_data.get('plane')
+        )
+        updated_flight = service.update_flight(flight_id, flight)
+        if not updated_flight:
+            raise HTTPException(status_code=404, detail="Полёт не найден для обновления")
+        return updated_flight
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка при удалении билета: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Ошибка при обновлении полёта: {str(e)}")
+
+
+@app.delete("/flights/{flight_id}")
+async def delete_flight(flight_id: int):
+    try:
+        result = service.delete_flight(flight_id)
+        if not result:
+            raise HTTPException(status_code=404, detail="Полёт не найден для удаления")
+        return {"message": "Полёт успешно удалён"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Ошибка при удалении полёта: {str(e)}")
 
 
 if __name__ == "__main__":

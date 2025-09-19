@@ -64,34 +64,34 @@ class TicketRepository:
         return None
 
     def update_ticket(self, ticket: Ticket):
-        """Изменить существующий билет.
-            Если билета не существует, ничего не делать."""
+        """Изменить существующий рейс.
+            Если рейса не существует, ничего не делать."""
         conn = self.connection.get_connection()
         cursor = conn.cursor()
 
         cursor.execute('''
-            UPDATE tickets
-            SET row = %s, place = %s, name_movie = %s, price = %s
+            UPDATE flights
+            SET price = %s, plane = %s
             WHERE id = %s
-            ''', (ticket.row, ticket.place, ticket.name_movie, ticket.price, ticket.id))
+            ''', (flight.price, flight.plane, flight.id))
 
         result = cursor.fetchone()
-        ticket.id = result[0]
+        flight.id = result[0]
         conn.commit()
 
         cursor.close()
         conn.close()
 
-        return ticket
+        return flight
 
-    def delete_ticket(self, ticket_id: int):
-        """Удалить существующий билет.
-            Если билета не существует, ничего не делать."""
+    def delete_flight(self, flight_id: int):
+        """Удалить существующий рейс.
+            Если рейса не существует, ничего не делать."""
         conn = self.connection.get_connection()
         cursor = conn.cursor()
         cursor.execute('''
-            DELETE FROM tickets WHERE id = %s
-            ''', (ticket_id,))
+            DELETE FROM flights WHERE id = %s
+            ''', (flight_id,))
         conn.commit()
         deleted = cursor.rowcount
 
