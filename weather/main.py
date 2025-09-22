@@ -1,15 +1,15 @@
-from database import DatabaseConfig, DatabaseConnection
-from migrations import MigrationManager
-from repository import TicketRepository
-from service import TicketService
+from server.database import DatabaseConfig, DatabaseConnection
+from server.migrations import MigrationManager
+from server.repository import TicketRepository
+from server.service import TicketService
 from fastapi import FastAPI, HTTPException
-from ticket import Ticket
+from server.ticket import Ticket
 
 # Initialize
 ## DB config
 db_config = DatabaseConfig(
     'ticketsdb',
-    '192.168.143.67',
+    '192.168.143.69',
     'postgres',
     '123Secret_a',
     5432

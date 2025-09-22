@@ -1,5 +1,5 @@
-from ticket import Ticket
-from database import DatabaseConnection
+from server.ticket import Ticket
+from server.database import DatabaseConnection
 
 
 class TicketRepository:
@@ -37,7 +37,9 @@ class TicketRepository:
             tickets.append(Ticket(
                 row[0],
                 row[1],
-                row[2]
+                row[2], 
+                row[3], 
+                row[4]
             ))
 
         cursor.close()
@@ -59,7 +61,9 @@ class TicketRepository:
             return Ticket(
                 row[0],
                 row[1],
-                row[2]
+                row[2], 
+                row[3],
+                row[4]
             )
         return None
 
