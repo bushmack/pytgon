@@ -1,5 +1,5 @@
-from server.ticket import Ticket
-from server.database import DatabaseConnection
+from ticket import Ticket
+from database import DatabaseConnection
 
 
 class TicketRepository:
@@ -16,7 +16,7 @@ class TicketRepository:
 
         cursor.execute('''
             INSERT INTO tickets
-                        (plane,price, name_movie, price)
+                        (row, place, name_movie, price)
                         VALUES (%s,%s,%s,%s)
             ''', (ticket.row, ticket.place, ticket.name_movie, ticket.price ))
         conn.commit()

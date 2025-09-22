@@ -1,5 +1,5 @@
-from server.repository import TicketRepository
-from server.ticket import Ticket
+from repository import TicketRepository
+from ticket import Ticket
 
 
 class TicketService:
