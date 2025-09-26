@@ -8,8 +8,8 @@ from ticket import Ticket
 # Initialize
 ## DB config
 db_config = DatabaseConfig(
-    'ticketsdb',
-    '192.168.143.67',
+    'tickets.kost',
+    '192.168.133.20',
     'postgres',
     '123Secret_a',
     5432
